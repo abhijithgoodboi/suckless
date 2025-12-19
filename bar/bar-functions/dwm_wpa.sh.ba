@@ -1,0 +1,37 @@
+#!/bin/bash
+
+black="#2E3440"
+#green="#A3BE8C"
+#white=#D8DEE9
+#grey=#373d49
+blue=#81A1C1
+#red=#BF616A
+darkblue=#7292b2
+
+
+# WiFi icons
+WIFI_CONNECTED_ICON='󰤨'
+WIFI_DISCONNECTED_ICON='󰤭'
+
+# Function to get WiFi status
+get_wifi() {
+    # Check if wireless interface is available
+    if [[ -e "/sys/class/net/wlan0/operstate" ]]; then
+        # Get the operational status of wireless interface
+        wifi_status=$(cat /sys/class/net/wlan0/operstate)
+        if [[ "$wifi_status" == "up" ]]; then
+            # Get the connected WiFi name
+            wifi_name=$(iwgetid -r)
+            echo "^c$black^^b$blue^ $WIFI_CONNECTED_ICON ^d^" "^c$blue^$wifi_name"   
+        else
+            echo " ^c$black^ ^b$blue^ $WIFI_DISCONNECTED_ICON^d^ " "^c$blue^Disonnected" 
+        fi
+    else
+        # Wireless interface not found
+        echo " ^c$RED^$WIFI_DISCONNECTED_ICON ^d^ " 
+    fi
+}
+
+# Call the function to get WiFi status
+get_wifi
+
